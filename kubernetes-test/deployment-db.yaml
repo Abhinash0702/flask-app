@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Unique key of the Deployment instance
+  name: my-sql
+spec:
+  # 3 Pods should exist at all times.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-sql
+  template:
+    metadata:
+      labels:
+        # Apply this label to pods and default
+        # the Deployment label selector to this value
+        app: my-sql
+    spec:
+      containers:
+      - name: my-sql
+        # Run this image
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_DATABASE
+          value: usersdb
+

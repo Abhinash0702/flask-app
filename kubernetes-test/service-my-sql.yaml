@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db  # ✅ This matches what your Flask app expects
+spec:
+  selector:
+    app: my-sql
+  ports:
+  - port: 3306
+    targetPort: 3306
+  type: LoadBalancer

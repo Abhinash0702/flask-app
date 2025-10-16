@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Unique key of the Deployment instance
+  name: my-flask-app
+spec:
+  # 3 Pods should exist at all times.
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        # Apply this label to pods and default
+        # the Deployment label selector to this value
+        app: flask-app 
+    spec:
+      containers:
+      - name: flask-app
+        # Run this image
+        image: 0720020191/python-flask-crud:01
+        ports:
+        - containerPort: 5000          # External port (can be anything)
+        
+
