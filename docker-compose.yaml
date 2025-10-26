@@ -6,7 +6,7 @@ services:
       dockerfile: dockerfile
     ports:
       - "5000:5000"
-    image: 0720020191/python-flask-app:02
+    image: flask-app:latest
     depends_on:
       - db
     environment:
