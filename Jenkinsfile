@@ -3,7 +3,7 @@ pipeline {
   agent {
     docker {
       image 'python:3.11-slim'      // use 'python:3.11-alpine' if you prefer Alpine
-      args  '-u'                    // unbuffered output for clearer logs
+      // args '<docker run args>'   // ⚠️ Do NOT put Python flags here; leave empty unless you need Docker-specific args
     }
   }
 
@@ -14,6 +14,7 @@ pipeline {
   }
 
   environment {
+    PYTHONUNBUFFERED = '1'          // unbuffered Python output (instead of args '-u')
     PIP_DISABLE_PIP_VERSION_CHECK = '1'
     PIP_NO_CACHE_DIR = '1'
     SKIP_DB = '1'                   // used by your tests to skip DB
@@ -67,7 +68,14 @@ pipeline {
       echo '❌ Validation failed. Check the stage logs above.'
     }
     always {
-      cleanWs()
+      // Guard cleanWs to avoid "MissingContextVariableException" if node/workspace wasn't allocated
+      script {
+        try {
+          cleanWs()
+        } catch (e) {
+          echo "Skipping cleanWs(): ${e}"
+        }
+      }
     }
   }
 }

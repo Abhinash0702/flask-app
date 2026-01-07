@@ -3,6 +3,24 @@ import mysql.connector
 import os
 import time
 
+# at the top of app.py
+import os
+SKIP_DB = os.environ.get('SKIP_DB') == '1'
+
+# before sleeping/connecting:
+if not SKIP_DB:
+    time.sleep(10)
+    conn = mysql.connector.connect(**db_config)
+    # ... rest of init (cursor, create table, commit, close) ...
+# else: skip DB init in CI
+
+# inside /submituser and /users, short-circuit for demo:
+if SKIP_DB:
+    # in submituser:
+    return f'<p>Demo mode: User {name} would be added!</p>/Add another</a>'
+    # in users:
+    return jsonify([])
+
 app = Flask(__name__)
 
 # Wait for MySQL to be ready
