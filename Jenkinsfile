@@ -47,7 +47,7 @@ pipeline {
       }
     }
 
-    stage('Run Tests (skip DB)') {
+    stage('Run Tests') {
       steps {
         dir('app') {
           sh '''
